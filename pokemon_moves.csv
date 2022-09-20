@@ -2,7 +2,7 @@ name,type,power,pp,speedboost,attackboost,multihit,message
 Create bug,Bug,30,100,0,0,0,default
 Struggle,Normal,10,50,0,0,0,default
 Spaghetti code,Normal,20,30,0,0,0,default
-Stack overflow,Normal,0,20,0.5,3,0,default
+Stack overflow,Normal,0,20,0.5,2,0,default
 Coffee,Normal,0,10,2,0,0,default
 Good practices,Normal,0,20,0,2,0,default
 For loop,Normal,10,30,0,0,1,default
@@ -13,3 +13,7 @@ Complain,Normal,20,20,0,0,0,default
 Decrease pay,Normal,30,10,0,0,0,default
 Code review,Normal,20,10,0,0,0,default
 Increase pay,Normal,0,10,0,2,0,default
+Short circuit,Electric,0,10,2,2,0,default
+Work properly,Electric,20,20,0,0,0,default
+AI sentience,Electric,30,20,2,2,0,The AI became sentient
+Precision error,Electric,20,20,0,0,0,default
