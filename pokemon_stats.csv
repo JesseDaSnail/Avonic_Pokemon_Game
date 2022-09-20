@@ -1,6 +1,6 @@
-name,attack,defense,speed,health,move1,move2,move3,move4
-Noobcoder,10,10,10,200,Create bug,Stack overflow,Spaghetti code,Coffee
-Procoder,20,20,20,200,Create bug,Good practices,For loop,Coffee
-Client,25,15,15,200,Order equipment,Missuse equipment,Request support,Coffee
-CEO,30,30,30,200,Decrease pay,Increase pay,Code review,Coffee
-Product,20,10,20,200,Short circuit,Work properly,AI sentience,Precision error
+name,attack,defense,speed,health,move1,move2,move3,move4,type
+Noobcoder,10,10,10,200,Create bug,Stack overflow,Spaghetti code,Coffee,Fighting
+Procoder,20,20,20,200,Create bug,Good practices,For loop,Coffee,Fighting
+Client,25,15,15,200,Order equipment,Missuse equipment,Request support,Coffee,Normal
+CEO,30,30,30,200,Decrease pay,Increase pay,Code review,Coffee,Normal
+Product,20,10,20,200,Short circuit,Work properly,AI sentience,Precision error,Electric

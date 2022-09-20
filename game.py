@@ -9,10 +9,14 @@ class PokemonGame:
         self.poke2 = None
         self.pokemon_stats = pd.read_csv("pokemon_stats.csv")
         self.pokemon_moves = pd.read_csv("pokemon_moves.csv")
-        self.pokemon_types = pd.read_csv("pokemon_types.csv")
+        self.pokemon_types = pd.read_csv("pokemon_types.csv").set_index("Attacking")
         self.chosen_move = None
     
     def display_start_menu(self):
+        """
+        Displays the start menu and asks for the user to chose a pokemon.
+        """
+
         welcome_text = """
 --------------------------------------------------------------------------------------------------------------
                        Welcome to the Avonic intake pokemon game!
@@ -38,6 +42,10 @@ class PokemonGame:
 
 
     def display_turn(self):
+        """
+        Displays the current game state and asks the user for a choice of move.
+        """
+
         screen_text = f"""
 Enemy {self.poke2['name']}: {self.poke2['health']}
 
@@ -45,25 +53,29 @@ Your {self.poke1['name']}: {self.poke1['health']}
 -------------------------------------------------------
 What will you do?
 
-0: {self.poke1["move1"]}
-1: {self.poke1["move2"]}
-2: {self.poke1["move3"]}
-3: {self.poke1["move4"]}
+1: {self.poke1["move1"]}
+2: {self.poke1["move2"]}
+3: {self.poke1["move3"]}
+4: {self.poke1["move4"]}
 
 """
         output = tabulate([[screen_text]], tablefmt='grid')
         print(output)
 
         choice = None
-        while choice not in range(0,4):
+        while choice not in range(1,5):
             try:
-                choice = int(input("Choose next move (0-3): "))
+                choice = int(input("Choose next move (1-4): "))
             except ValueError:
                 print("Please input an integer!")
-        self.chosen_move = self.poke1[f'move{choice+1}']
+        self.chosen_move = self.poke1[f'move{choice}']
   
 
     def player_move(self):
+        """
+        Handles the player's chosen move
+        """
+
         move = self.chosen_move
         print(f"Your {self.poke1['name']} used {move}!")
         time.sleep(1)
@@ -76,8 +88,15 @@ What will you do?
 
         if float(move_series['power']) > 0:
             # calculate damage
-            damage_multiplier = self.poke1['attack'] / self.poke2['defense']
-            damage = float(move_series['power']) * damage_multiplier
+            type_multiplier = self.pokemon_types[move_series['type'].item()][self.poke2['type']]
+            print("aaaa", type_multiplier)
+            if type_multiplier > 1:
+                print("It's super effective!")
+            elif type_multiplier < 1:
+                print("It's not very effective!")
+
+            attack_defense_multiplier = self.poke1['attack'] / self.poke2['defense']
+            damage = float(move_series['power']) * attack_defense_multiplier * type_multiplier
             if int(move_series['multihit']):
                 num_hits = np.random.randint(1,6)
                 damage *= num_hits
@@ -102,6 +121,10 @@ What will you do?
 
 
     def enemy_move(self):
+        """
+        Handles the enemy's randomly chosen move
+        """
+
         random_choice = np.random.randint(0,4)
         move = self.poke2[f'move{random_choice+1}']
         print(f"Enemy {self.poke2['name']} used {move}!")
@@ -136,6 +159,10 @@ What will you do?
 
 
     def run(self):
+        """
+        Main loop
+        """
+
         while True:
             self.display_turn()
             if self.poke1["speed"] > self.poke2["speed"]:
@@ -154,6 +181,7 @@ What will you do?
                     break
         self.end_screen(exit_condition)
     
+
     def end_screen(self,win_condition):
         if win_condition == 1:
             screen_text = f"""
