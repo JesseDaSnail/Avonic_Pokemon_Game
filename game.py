@@ -69,6 +69,11 @@ What will you do?
         time.sleep(1)
         
         move_series = self.pokemon_moves.loc[self.pokemon_moves['name'] == move]
+
+        if move_series['message'].item() != 'default':
+            print(move_series['message'].item())
+            time.sleep(1)
+
         if float(move_series['power']) > 0:
             # calculate damage
             damage_multiplier = self.poke1['attack'] / self.poke2['defense']
