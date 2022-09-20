@@ -5,9 +5,11 @@ import time
 
 class PokemonGame:
     def __init__(self):
+        self.current_pokemon = None
         self.poke1 = None
         self.poke2 = None
         self.pokemon_stats = pd.read_csv("pokemon_stats.csv")
+        self.pokemon_team = pd.read_csv("pokemon_stats.csv")
         self.pokemon_moves = pd.read_csv("pokemon_moves.csv")
         self.pokemon_types = pd.read_csv("pokemon_types.csv").set_index("Attacking")
         self.chosen_move = None
@@ -24,18 +26,19 @@ class PokemonGame:
 --------------------------------------------------------------------------------------------------------------
                        """
         print(welcome_text)
-        print(self.pokemon_stats)
-        print("-"*110)
+        self.pokemon_selection()
+        # print(self.pokemon_stats)
+        # print("-"*110)
 
-        choice = None
-        while choice not in range(0,self.pokemon_stats.shape[0]):
-            try:
-                choice = int(input(f"Choose pokemon (0-{self.pokemon_stats.shape[0]-1}): "))
-            except ValueError:
-                print(f"Please input an integer between 0 and {self.pokemon_stats.shape[0]-1}")
+        # choice = None
+        # while choice not in range(0,self.pokemon_stats.shape[0]):
+        #     try:
+        #         choice = int(input(f"Choose pokemon (0-{self.pokemon_stats.shape[0]-1}): "))
+        #     except ValueError:
+        #         print(f"Please input an integer between 0 and {self.pokemon_stats.shape[0]-1}")
             
-        self.poke1 = self.pokemon_stats.iloc[choice].to_dict()
-        print(f"You have chosen {self.poke1['name']}!")
+        # self.poke1 = self.pokemon_stats.iloc[choice].to_dict()
+        # print(f"You have chosen {self.poke1['name']}!")
 
         # self.poke2 = self.pokemon_stats.iloc[np.random.randint(0,4)].to_dict()
         choice = None
@@ -66,23 +69,55 @@ What will you do?
 3: {self.poke1["move3"]}
 4: {self.poke1["move4"]}
 
+5: Switch main pokemon
 """
         output = tabulate([[screen_text]], tablefmt='grid')
         print(output)
 
         choice = None
-        while choice not in range(1,5):
+        while choice not in range(1,6):
             try:
-                choice = int(input("Choose next move (1-4): "))
+                choice = int(input("Choose next move (1-5): "))
             except ValueError:
                 print("Please input an integer!")
-        self.chosen_move = self.poke1[f'move{choice}']
-  
+        
+        if choice == 5:
+            self.pokemon_selection()
+            self.chosen_move = None
+        else:
+            self.chosen_move = self.poke1[f'move{choice}']
+
+
+    def pokemon_selection(self):
+        """
+        Handles selection of a new main pokemon
+        """
+        if self.poke1:
+            self.pokemon_team.loc[self.current_pokemon:self.current_pokemon, 'health'] = self.poke1['health']
+
+        print(self.pokemon_team)
+        print("-"*110)
+
+        choice = None
+        while choice not in range(0,self.pokemon_team.shape[0]) or choice == self.current_pokemon:
+            try:
+                choice = int(input(f"Choose pokemon (0-{self.pokemon_team.shape[0]-1}): "))
+                if choice == self.current_pokemon:
+                    print("This pokemon is already battling!")
+            except ValueError:
+                print(f"Please input an integer between 0 and {self.pokemon_team.shape[0]-1}")
+        
+        self.current_pokemon = choice
+        self.poke1 = self.pokemon_team.iloc[choice].to_dict()
+        print(f"You have chosen {self.poke1['name']}!")
+
 
     def player_move(self):
         """
         Handles the player's chosen move
         """
+        if self.chosen_move is None:
+            return
 
         move = self.chosen_move
         print(f"Your {self.poke1['name']} used {move}!")
