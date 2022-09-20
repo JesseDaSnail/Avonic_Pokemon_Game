@@ -27,20 +27,7 @@ class PokemonGame:
                        """
         print(welcome_text)
         self.pokemon_selection()
-        # print(self.pokemon_stats)
-        # print("-"*110)
 
-        # choice = None
-        # while choice not in range(0,self.pokemon_stats.shape[0]):
-        #     try:
-        #         choice = int(input(f"Choose pokemon (0-{self.pokemon_stats.shape[0]-1}): "))
-        #     except ValueError:
-        #         print(f"Please input an integer between 0 and {self.pokemon_stats.shape[0]-1}")
-            
-        # self.poke1 = self.pokemon_stats.iloc[choice].to_dict()
-        # print(f"You have chosen {self.poke1['name']}!")
-
-        # self.poke2 = self.pokemon_stats.iloc[np.random.randint(0,4)].to_dict()
         choice = None
         while choice not in range(0,self.pokemon_stats.shape[0]):
             try:
@@ -92,7 +79,7 @@ What will you do?
         """
         Handles selection of a new main pokemon
         """
-        if self.poke1:
+        if self.poke1:  # update current team with new health values
             self.pokemon_team.loc[self.current_pokemon:self.current_pokemon, 'health'] = self.poke1['health']
 
         print(self.pokemon_team)
