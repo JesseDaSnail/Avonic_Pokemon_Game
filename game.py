@@ -14,18 +14,18 @@ class PokemonGame:
     
     def display_start_menu(self):
         welcome_text = """
----------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
                        Welcome to the Avonic intake pokemon game!
                        To start a battle, pick one of the following pokemon.
----------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
                        """
         print(welcome_text)
         print(self.pokemon_stats)
         print("-"*110)
 
         choice = None
-        while choice not in range(0,5):
-            print("Please input an integer between 0 and 4")
+        while choice not in range(0,self.pokemon_stats.shape[0]):
+            print(f"Please input an integer between 0 and {self.pokemon_stats.shape[0]-1}")
             try:
                 choice = int(input("Choose pokemon: "))
             except ValueError:
@@ -69,10 +69,10 @@ What will you do?
         time.sleep(1)
         
         move_series = self.pokemon_moves.loc[self.pokemon_moves['name'] == move]
-        if int(move_series['power']) > 0:
+        if float(move_series['power']) > 0:
             # calculate damage
             damage_multiplier = self.poke1['attack'] / self.poke2['defense']
-            damage = int(move_series['power']) * damage_multiplier
+            damage = float(move_series['power']) * damage_multiplier
             if int(move_series['multihit']):
                 num_hits = np.random.randint(1,6)
                 damage *= num_hits
@@ -81,14 +81,14 @@ What will you do?
             print(f"Damage done = {damage}")
             time.sleep(1)
 
-        if int(move_series['attackboost']) > 0:
+        if float(move_series['attackboost']) > 0:
             self.poke1['attack'] *= int(move_series['attackboost'])
-            print(f"{self.poke1['name']}'s attack was increased!")
+            print(f"Your {self.poke1['name']}'s attack was {(float(move_series['attackboost'])>1)*'increased'}{(float(move_series['attackboost'])<1)*'decreased'}!")
             time.sleep(1)
 
-        if int(move_series['speedboost']) > 0:
+        if float(move_series['speedboost']) > 0:
             self.poke1['speed'] *= int(move_series['speedboost'])
-            print(f"{self.poke1['name']}'s speed was increased!")
+            print(f"Your {self.poke1['name']}'s speed was {(float(move_series['speedboost'])>1)*'increased'}{(float(move_series['speedboost'])<1)*'decreased'}!")
             time.sleep(1)
 
         if self.poke2['health'] <= 0:
@@ -103,10 +103,10 @@ What will you do?
         time.sleep(1)
         
         move_series = self.pokemon_moves.loc[self.pokemon_moves['name'] == move]
-        if int(move_series['power']) > 0:
+        if float(move_series['power']) > 0:
             # calculate damage
             damage_multiplier = self.poke2['attack'] / self.poke1['defense']
-            damage = int(move_series['power']) * damage_multiplier
+            damage = float(move_series['power']) * damage_multiplier
             if int(move_series['multihit']):
                 num_hits = np.random.randint(1,6)
                 damage *= num_hits
@@ -115,14 +115,14 @@ What will you do?
             print(f"Damage done = {damage}")
             time.sleep(1)
 
-        if int(move_series['attackboost']) > 0:
+        if float(move_series['attackboost']) > 0:
             self.poke2['attack'] *= int(move_series['attackboost'])
-            print(f"{self.poke2['name']}'s attack was increased!")
+            print(f"Enemy {self.poke2['name']}'s attack was {(float(move_series['attackboost'])>1)*'increased'}{(float(move_series['attackboost'])<1)*'decreased'}!")
             time.sleep(1)
 
-        if int(move_series['speedboost']) > 0:
-            self.poke2['speed'] *= int(move_series['speedboost'])
-            print(f"{self.poke2['name']}'s speed was increased!")
+        if float(move_series['speedboost']) > 0:
+            self.poke2['speed'] *= float(move_series['speedboost'])
+            print(f"Enemy {self.poke2['name']}'s speed was {(float(move_series['speedboost'])>1)*'increased'}{(float(move_series['speedboost'])<1)*'decreased'}!")
             time.sleep(1)
 
         if self.poke1['health'] <= 0:
