@@ -29,15 +29,23 @@ class PokemonGame:
 
         choice = None
         while choice not in range(0,self.pokemon_stats.shape[0]):
-            print(f"Please input an integer between 0 and {self.pokemon_stats.shape[0]-1}")
             try:
-                choice = int(input("Choose pokemon: "))
+                choice = int(input(f"Choose pokemon (0-{self.pokemon_stats.shape[0]-1}): "))
             except ValueError:
-                print("That is not an integer!")
+                print(f"Please input an integer between 0 and {self.pokemon_stats.shape[0]-1}")
             
         self.poke1 = self.pokemon_stats.iloc[choice].to_dict()
         print(f"You have chosen {self.poke1['name']}!")
-        self.poke2 = self.pokemon_stats.iloc[np.random.randint(0,4)].to_dict()
+
+        # self.poke2 = self.pokemon_stats.iloc[np.random.randint(0,4)].to_dict()
+        choice = None
+        while choice not in range(0,self.pokemon_stats.shape[0]):
+            try:
+                choice = int(input(f"Choose enemy pokemon (0-{self.pokemon_stats.shape[0]-1}): "))
+            except ValueError:
+                print(f"Please input an integer between 0 and {self.pokemon_stats.shape[0]-1}")
+
+        self.poke2 = self.pokemon_stats.iloc[choice].to_dict()
         print(f"Your opponent has chosen {self.poke2['name']}!")
 
 
@@ -88,8 +96,7 @@ What will you do?
 
         if float(move_series['power']) > 0:
             # calculate damage
-            type_multiplier = self.pokemon_types[move_series['type'].item()][self.poke2['type']]
-            print("aaaa", type_multiplier)
+            type_multiplier = self.pokemon_types[self.poke2['type']][move_series['type'].item()]
             if type_multiplier > 1:
                 print("It's super effective!")
             elif type_multiplier < 1:
@@ -133,8 +140,14 @@ What will you do?
         move_series = self.pokemon_moves.loc[self.pokemon_moves['name'] == move]
         if float(move_series['power']) > 0:
             # calculate damage
-            damage_multiplier = self.poke2['attack'] / self.poke1['defense']
-            damage = float(move_series['power']) * damage_multiplier
+            type_multiplier = self.pokemon_types[self.poke1['type']][move_series['type'].item()]
+            if type_multiplier > 1:
+                print("It's super effective!")
+            elif type_multiplier < 1:
+                print("It's not very effective!")
+            
+            attack_defense_multiplier = self.poke2['attack'] / self.poke1['defense']
+            damage = float(move_series['power']) * attack_defense_multiplier * type_multiplier
             if int(move_series['multihit']):
                 num_hits = np.random.randint(1,6)
                 damage *= num_hits
